@@ -1,15 +1,17 @@
 # Локальный WordPress
 ## Подготовка
-Подготовка
+Snap:
 ```console
-sudo snap install docker --classic
+snap install docker --classic
 ```
 ## Установка
+Git:
 ```console
 git clone https://github.com/stanislavzadiraev/wp.git
 ```
 ## Настройка
-```python
+чтение/запись/выполнение
+```console
 chmod -R 777 plugins
 chmod -R 777 themes
 ```
