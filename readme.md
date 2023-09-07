@@ -24,17 +24,19 @@ docker compose up
 ```
 ## Контейнер
 docker-compose.yml:
+### MySQL
+volumes:\
+`./mysql/`
+### Adminer
+port:\
+`localhost:9090`
 ### Wordpress
 port:\
- `localhost:8080`
-
+ `localhost:8080`\
 volumes:\
 `./plugins/`\
 `./themes/`\
 `./uploads/`
-### Adminer
-port:\
-`localhost:9090`
 ### WP-CLI
 command:\
 `/bin/sh -c '#####'`

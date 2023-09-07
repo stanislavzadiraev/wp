@@ -12,13 +12,14 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
-      - mysql:/var/lib/mysql
+      - ./mysql/:/var/lib/mysql
 
   adminer:
     image: adminer:latest
     restart: always
     depends_on:
-      - mysql
+      mysql:
+        condition: service_started
     ports:
       - 9090:8080 
 
@@ -26,7 +27,8 @@ services:
     image: wordpress:latest
     restart: always
     depends_on: 
-      - mysql
+      mysql:
+        condition: service_started
     ports:
       - 8080:80
     environment:
@@ -43,7 +45,10 @@ services:
   wp-cli:
     container_name: wp-cli
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_started
+      mysql:
+        condition: service_started      
     image: wordpress:cli
     user: xfs
     volumes:
@@ -55,6 +60,7 @@ services:
       WORDPRESS_DB_NAME: database
     command: >
       /bin/sh -c '
+        sleep 30;
         wp core install\
           --path="/var/www/html"\
           --url="http://localhost:8080"\
@@ -62,20 +68,20 @@ services:
           --admin_user=user\
           --admin_password=password\
           --admin_email=foo@bar.com\
-          --locale="ru_RU"
+          --locale="ru_RU";
 
         wp core update\
-          --locale="ru_RU"
+          --locale="ru_RU";
 
         wp plugin install\
           woocommerce\
           create-block-theme\
           icon-block\
           media-sync\
-          --activate\
+          --activate;
 
         wp plugin update\
-          --all\
+          --all;
 
       '
 
