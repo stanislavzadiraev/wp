@@ -64,6 +64,7 @@ services:
     command: >
       /bin/sh -c '
         sleep 30;
+
         wp core install\
           --path="/var/www/html"\
           --url="http://localhost:8080"\
@@ -71,10 +72,11 @@ services:
           --admin_user=user\
           --admin_password=password\
           --admin_email=foo@bar.com\
-          --locale="ru_RU";
 
         wp core update\
-          --locale="ru_RU";
+
+        wp language core install ru_RU
+        wp language core activate ru_RU
 
         wp plugin install\
           woocommerce\
@@ -86,7 +88,7 @@ services:
         wp plugin update\
           --all;
       '
-      
+
 volumes:
   mysql:
   wordpress:
