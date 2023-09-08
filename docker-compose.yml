@@ -53,6 +53,9 @@ services:
     user: xfs
     volumes:
       - wordpress:/var/www/html
+      - ./themes/:/var/www/html/wp-content/themes/
+      - ./plugins/:/var/www/html/wp-content/plugins/
+      - ./uploads/:/var/www/html/wp-content/uploads/
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: user
@@ -82,9 +85,8 @@ services:
 
         wp plugin update\
           --all;
-
       '
-
+      
 volumes:
   mysql:
   wordpress:
