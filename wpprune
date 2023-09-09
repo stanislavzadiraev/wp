@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./wpunlock
+rm -R ./plugins
+rm -R ./themes
+rm -R ./uploads
+./wptouch

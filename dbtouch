@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mkdir ./mysql
+touch ./mysql/.gitkeep

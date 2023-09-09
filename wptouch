@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir ./plugins
+touch ./plugins/.gitkeep
+
+mkdir ./themes
+touch ./themes/.gitkeep
+
+mkdir ./uploads
+touch ./uploads/.gitkeep
