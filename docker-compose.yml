@@ -31,11 +31,6 @@ services:
         condition: service_started
     ports:
       - 8080:80
-    environment:
-      WORDPRESS_DB_HOST: mysql
-      WORDPRESS_DB_USER: user
-      WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_DB_NAME: database
     volumes:
       - wordpress:/var/www/html
       - ./themes/:/var/www/html/wp-content/themes/
@@ -56,14 +51,17 @@ services:
       - ./themes/:/var/www/html/wp-content/themes/
       - ./plugins/:/var/www/html/wp-content/plugins/
       - ./uploads/:/var/www/html/wp-content/uploads/
-    environment:
-      WORDPRESS_DB_HOST: mysql
-      WORDPRESS_DB_USER: user
-      WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_DB_NAME: database
+
     command: >
       /bin/sh -c '
-        sleep 30;
+        sleep 40;
+
+        wp config create\
+          --dbhost=mysql\
+          --dbname=database\
+          --dbuser=user\
+          --dbpass=password\
+          --skip-check\
 
         wp core install\
           --path="/var/www/html"\
