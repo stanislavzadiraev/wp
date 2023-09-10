@@ -54,7 +54,7 @@ services:
 
     command: >
       /bin/sh -c '
-        sleep 40;
+        sleep 40
 
         wp config create\
           --dbhost=mysql\
@@ -71,20 +71,20 @@ services:
           --admin_password=password\
           --admin_email=foo@bar.com\
 
-        wp core update\
+        wp core update
 
         wp language core install ru_RU
         wp language core activate ru_RU
 
         wp plugin install\
+          "https://github.com/Bezmie/bz-common/archive/main.zip"\
           woocommerce\
           create-block-theme\
           icon-block\
           media-sync\
-          --activate;
-
-        wp plugin update\
-          --all;
+          
+        wp plugin update --all
+        wp plugin activate --all
       '
 
 volumes:
