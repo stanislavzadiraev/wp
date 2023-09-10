@@ -12,11 +12,31 @@ Git:
 git clone https://github.com/stanislavzadiraev/wp.git
 ```
 ### Настройка
-чтение/запись/выполнение
+общая зачистка
 ```console
-chmod -R 777 plugins
-chmod -R 777 themes
+./prune
 ```
+#### файлы
+разблокировка 
+```console
+./dbunlock
+./wpunlock
+```
+восстановление
+```console
+./dbtouch
+./wptouch
+```
+зачистка
+```console
+./dbprune
+./wptouch
+```
+#### докер
+зачистка контейнеров и томов
+```console
+./dсprune
+``` 
 ### Запуск
 Docker:
 ```console
