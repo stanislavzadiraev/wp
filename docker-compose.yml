@@ -76,9 +76,12 @@ services:
         wp language core activate ru_RU
 
         wp plugin delete\
+          akismet\
           hello\
 
         wp plugin install\
+          create-block-theme\
+          \
           woocommerce\
           icon-block\
           media-sync\
