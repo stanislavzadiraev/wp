@@ -7,9 +7,9 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: database
+      MYSQL_DATABASE: base
       MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: word
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - ./mysql/:/var/lib/mysql
@@ -38,7 +38,6 @@ services:
       - ./uploads/:/var/www/html/wp-content/uploads/
 
   wp-cli:
-    container_name: wp-cli
     depends_on:
       wordpress:
         condition: service_started
@@ -58,9 +57,9 @@ services:
 
         wp config create\
           --dbhost=mysql\
-          --dbname=database\
+          --dbname=base\
           --dbuser=user\
-          --dbpass=password\
+          --dbpass=word\
           --skip-check\
 
         wp core install\
@@ -68,7 +67,7 @@ services:
           --url="http://localhost:8080"\
           --title="Local Wordpress By Docker"\
           --admin_user=user\
-          --admin_password=password\
+          --admin_password=word\
           --admin_email=foo@bar.com\
 
         wp core update
@@ -76,15 +75,25 @@ services:
         wp language core install ru_RU
         wp language core activate ru_RU
 
+        wp plugin delete\
+          hello\
+
         wp plugin install\
-          "https://github.com/Bezmie/bz-common/archive/main.zip"\
           woocommerce\
-          create-block-theme\
           icon-block\
           media-sync\
+          \
+          advanced-custom-fields\
+          regenerate-thumbnails\
+          developer\
           
         wp plugin update --all
         wp plugin activate --all
+
+        wp theme delete\
+          twentytwentyone\
+          twentytwentytwo\
+          
       '
 
 volumes:
