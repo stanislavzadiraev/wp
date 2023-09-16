@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo 'UIDGID='$(id -g)':'$(id -u) >> .env

@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: base
       MYSQL_USER: user
       MYSQL_PASSWORD: word
+    user: "${UIDGID}"
     volumes:
       - ./mysql/:/var/lib/mysql
 
@@ -35,26 +36,26 @@ services:
         condition: service_started
     ports:
       - 8080:80
+    user: "${UIDGID}"
     volumes:
       - wordpress:/var/www/html
       - ./themes/:/var/www/html/wp-content/themes/
       - ./plugins/:/var/www/html/wp-content/plugins/
       - ./uploads/:/var/www/html/wp-content/uploads/
 
-  wp-cli:
+  wp-cli:    
+    image: wordpress:cli
     depends_on:
       wordpress:
         condition: service_started
       mysql:
-        condition: service_started      
-    image: wordpress:cli
-    user: xfs
+        condition: service_started
+    user: "${UIDGID}"  
     volumes:
       - wordpress:/var/www/html
       - ./themes/:/var/www/html/wp-content/themes/
       - ./plugins/:/var/www/html/wp-content/plugins/
       - ./uploads/:/var/www/html/wp-content/uploads/
-
     command: >
       /bin/sh -c '
         sleep 40

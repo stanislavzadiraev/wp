@@ -5,6 +5,11 @@ Git:
 ```console
 git clone https://github.com/stanislavzadiraev/wp.git
 ```
+### Подготовка
+настройка окружения
+```console
+./uidgid
+```
 ### Настройка
 общая зачистка
 ```console
