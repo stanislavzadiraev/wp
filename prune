@@ -1,5 +1,5 @@
 #!/bin/sh
 
-./dbprune
-./wpprune
-./dcprune
+./prunedb
+./prunewp
+./prunedc

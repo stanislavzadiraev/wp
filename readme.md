@@ -1,11 +1,5 @@
 # Локальный WordPress
 ## Система
-
-### Подготовка
-Snap:
-```console
-snap install docker --classic
-```
 ### Установка
 Git:
 ```console
@@ -45,14 +39,18 @@ docker compose up
 ## Контейнер
 docker-compose.yml:
 ### MySQL
+port:\
+`none`\
 volumes:\
 `./mysql/`
-### Adminer
+### PHPmyAdmin
 port:\
-`localhost:9090`
+`7070`\
+volumes:\
+`none`
 ### Wordpress
 port:\
- `localhost:8080`\
+ `8080`\
 volumes:\
 `./plugins/`\
 `./themes/`\

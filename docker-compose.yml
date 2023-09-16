@@ -10,18 +10,21 @@ services:
       MYSQL_DATABASE: base
       MYSQL_USER: user
       MYSQL_PASSWORD: word
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - ./mysql/:/var/lib/mysql
 
-  adminer:
-    image: adminer:latest
+  phpmyadmin:
+    image: phpmyadmin:latest
     restart: always
     depends_on:
       mysql:
         condition: service_started
     ports:
-      - 9090:8080 
+      - 7070:80
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: user
+      PMA_PASSWORD: word
 
   wordpress:
     image: wordpress:latest
@@ -80,16 +83,18 @@ services:
           hello\
 
         wp plugin install\
-          create-block-theme\
+          advanced-custom-fields\
           \
           woocommerce\
-          icon-block\
-          media-sync\
           \
-          advanced-custom-fields\
-          regenerate-thumbnails\
-          developer\
-          
+          media-sync\
+          post-duplicator\
+          \
+          create-block-theme\
+          advanced-query-loop\
+          content-blocks-builder\
+          icon-block\
+
         wp plugin update --all
         wp plugin activate --all
 

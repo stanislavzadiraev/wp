@@ -1,4 +1,5 @@
 #!/bin/sh
 
+yes | rm -R ./mysql
 mkdir ./mysql
 touch ./mysql/.gitkeep

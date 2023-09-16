@@ -1,10 +1,13 @@
 #!/bin/sh
 
+yes | rm -R ./plugins
 mkdir ./plugins
 touch ./plugins/.gitkeep
 
+yes | rm -R ./themes
 mkdir ./themes
 touch ./themes/.gitkeep
 
+yes | rm -R ./uploads
 mkdir ./uploads
 touch ./uploads/.gitkeep

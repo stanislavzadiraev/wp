@@ -1,5 +1,0 @@
-#!/bin/sh
-
-sudo chmod -R 777 plugins
-sudo chmod -R 777 themes
-sudo chmod -R 777 uploads

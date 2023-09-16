@@ -1,5 +1,0 @@
-#!/bin/sh
-
-./dbunlock
-rm -R ./mysql
-./dbtouch
