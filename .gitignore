@@ -1,6 +1,4 @@
-/uploads/
-/plugins/
-/themes/
-/mysql/
+/database/
+/wordpress/
 
 .env

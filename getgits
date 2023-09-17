@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git clone "https://github.com/Bezmie/bz-common.git" ./plugins/bz-common/
+git clone "https://github.com/Bezmie/bz-common.git" ./wordpress/wp-content/plugins/bz-common/
 
-git clone "https://github.com/stanislavzadiraev/alpha.git" ./themes/alpha/
-git clone "https://github.com/stanislavzadiraev/beta.git" ./themes/beta/
+git clone "https://github.com/stanislavzadiraev/alpha.git" ./wordpress/wp-content/themes/alpha/
+git clone "https://github.com/stanislavzadiraev/beta.git" ./wordpress/wp-content/themes/beta/

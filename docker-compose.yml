@@ -13,7 +13,7 @@ services:
       MYSQL_PASSWORD: word
     user: "${UIDGID}"
     volumes:
-      - ./mysql/:/var/lib/mysql
+      - ./database/:/var/lib/mysql/
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -38,10 +38,7 @@ services:
       - 8080:80
     user: "${UIDGID}"
     volumes:
-      - wordpress:/var/www/html
-      - ./themes/:/var/www/html/wp-content/themes/
-      - ./plugins/:/var/www/html/wp-content/plugins/
-      - ./uploads/:/var/www/html/wp-content/uploads/
+      - ./wordpress/:/var/www/html/
 
   wp-cli:    
     image: wordpress:cli
@@ -52,10 +49,8 @@ services:
         condition: service_started
     user: "${UIDGID}"  
     volumes:
-      - wordpress:/var/www/html
-      - ./themes/:/var/www/html/wp-content/themes/
-      - ./plugins/:/var/www/html/wp-content/plugins/
-      - ./uploads/:/var/www/html/wp-content/uploads/
+      - ./wordpress/:/var/www/html/
+
     command: >
       /bin/sh -c '
         sleep 40
@@ -105,7 +100,3 @@ services:
           twentytwentytwo\
           
       '
-
-volumes:
-  mysql:
-  wordpress:

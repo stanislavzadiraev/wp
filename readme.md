@@ -35,7 +35,7 @@ docker-compose.yml:
 ports:\
 `none`\
 volumes:\
-`./mysql/`
+`./database/`
 ### PHPmyAdmin
 ports:\
 `7070`\
@@ -45,9 +45,7 @@ volumes:\
 ports:\
  `8080`\
 volumes:\
-`./plugins/`\
-`./themes/`\
-`./uploads/`
+`./wordpress/`\
 ### WP-CLI
 ports:\
 `none`\
