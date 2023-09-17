@@ -15,26 +15,14 @@ git clone https://github.com/stanislavzadiraev/wp.git
 ```console
 ./prune
 ```
-#### файлы
-разблокировка 
+зачистка базы данных и файловых подсистем
 ```console
-./dbunlock
-./wpunlock
+./prunedb
+./prunewp
 ```
-восстановление
+зачистка контейнеров и вольюмов
 ```console
-./dbtouch
-./wptouch
-```
-зачистка
-```console
-./dbprune
-./wptouch
-```
-#### докер
-зачистка контейнеров и томов
-```console
-./dсprune
+./prunedc
 ``` 
 ### Запуск
 Docker:
@@ -44,22 +32,24 @@ docker compose up
 ## Контейнер
 docker-compose.yml:
 ### MySQL
-port:\
+ports:\
 `none`\
 volumes:\
 `./mysql/`
 ### PHPmyAdmin
-port:\
+ports:\
 `7070`\
 volumes:\
 `none`
 ### Wordpress
-port:\
+ports:\
  `8080`\
 volumes:\
 `./plugins/`\
 `./themes/`\
 `./uploads/`
 ### WP-CLI
-command:\
-`/bin/sh -c '#####'`
+ports:\
+`none`\
+volumes:\
+`none`\
