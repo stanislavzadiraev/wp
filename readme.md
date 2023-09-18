@@ -29,7 +29,7 @@ Docker:
 ```console
 docker compose up
 ```
-## Контейнер
+## Контейнеры
 docker-compose.yml:
 ### MySQL
 ports:\

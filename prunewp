@@ -1,5 +1,5 @@
 #!/bin/sh
 
-yes | rm -R ./wordpress
+yes | rm -R ./wordpress/*
 mkdir ./wordpress
 touch ./wordpress/.gitkeep
