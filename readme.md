@@ -6,7 +6,7 @@ Git:
 git clone https://github.com/stanislavzadiraev/wp.git
 ```
 ### Подготовка
-настройка окружения
+подготовка окружения
 ```console
 ./uidgid
 ```
