@@ -1,8 +1,8 @@
 import { writeFile } from 'node:fs/promises'
-
+import { userInfo } from 'node: os'
 const PATH = process.cwd()
 
-const [UID, GID] = os.userInfo()
+const [UID, GID] = userInfo()
 
 const INDEX = ({
 
