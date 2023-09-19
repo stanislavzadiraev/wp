@@ -11,11 +11,16 @@ const INDEX = ({
         dbname = 'base',
         dbuser = 'user',
         dbword = 'word',
+
         dbport = '9090',
 
         wplang = 'ru_RU',
+        wptitle = 'Some Title',
+
         wpuser = 'user',
-        wpword = 'word',        
+        wpword = 'word',
+        wpmail = 'mail@nowhere.void',
+
         wpport = '8080',
     }) =>
     Promise.all([
@@ -90,9 +95,11 @@ const INDEX = ({
             
                     wp core install\
                       --path="/var/www/html"\
-                      --url="http://localhost:${wpport}"\
+                      --url=http://localhost:${wpport}\
+                      --title="${wptitle}"\
                       --admin_user=${wpuser}\
                       --admin_password=${wpword}\
+                      --admin_email=${wpmail}\ 
             
                     wp core update
             
@@ -127,45 +134,14 @@ const INDEX = ({
             `
         ),
         writeFile(
-            PATH + '/prunedc',
-            `
-                #!/bin/sh
-
-                yes | docker container prune
-                yes | docker volume prune
-            `,
-            {mode: 0o755}
-        ),
-        writeFile(
-            PATH + '/prunedb',
-            `
-            #!/bin/sh
-
-            yes | rm -R ./${dbslug}/*
-            mkdir ./${dbslug}
-            touch ./${dbslug}/.gitkeep
-            `,
-            {mode: 0o755}
-        ),
-        writeFile(
-            PATH + '/prunewp',
-            `
-            #!/bin/sh
-
-            yes | rm -R ./${wpslug}/*
-            mkdir ./${wpslug}
-            touch ./${wpslug}/.gitkeep
-            `,
-            {mode: 0o755}
-        ),
-        writeFile(
           PATH + '/prune',
           `
           #!/bin/sh
 
-          ./prunedc
-          ./prunedb
-          ./prunewp
+          yes | rm -R ./${dbslug}
+          yes | rm -R ./${wpslug}
+          yes | rm ./docker-compose.yml
+          yes | rm ./prune
           `,
           {mode: 0o755}
       ),         
