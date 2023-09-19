@@ -1,5 +1,0 @@
-#!/bin/sh
-
-yes | rm -R ./database/*
-mkdir ./database
-touch ./database/.gitkeep

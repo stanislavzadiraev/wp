@@ -1,5 +1,0 @@
-#!/bin/sh
-
-./prunedb
-./prunewp
-./prunedc
