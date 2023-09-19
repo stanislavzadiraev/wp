@@ -5,12 +5,22 @@ const PATH = process.cwd()
 const {uid:UID, gid:GID} = userInfo()
 
 const INDEX = ({
-        wpword = 'wordpress',
-        dbword = 'database',
+        wpslug = 'wordpress',
+        dbslug = 'database',
+
+        dbname = 'base',
+        dbuser = 'user',
+        dbword = 'word',
+        dbport = '9090',
+
+        wplang = 'ru_RU',
+        wpuser = 'user',
+        wpword = 'word',        
+        wpport = '8080',
     }) =>
     Promise.all([
-        mkdir(PATH + `/` + wpword).catch(_=>_),
-        mkdir(PATH + `/` + dbword).catch(_=>_),
+        mkdir(PATH + `/` + wpslug).catch(_=>_),
+        mkdir(PATH + `/` + dbslug).catch(_=>_),
         writeFile(
             PATH + '/docker-compose.yml',
             `
@@ -24,12 +34,12 @@ const INDEX = ({
                 restart: always
                 environment:
                   MYSQL_RANDOM_ROOT_PASSWORD: OK
-                  MYSQL_DATABASE: base
-                  MYSQL_USER: user
-                  MYSQL_PASSWORD: word
+                  MYSQL_DATABASE: ${dbname}
+                  MYSQL_USER: ${dbuser}
+                  MYSQL_PASSWORD: ${dbword}
                 user: "${UID}:${GID}"
                 volumes:
-                  - ./${dbword}/:/var/lib/mysql/
+                  - ./${dbslug}/:/var/lib/mysql/
             
               phpmyadmin:
                 image: phpmyadmin:latest
@@ -38,11 +48,11 @@ const INDEX = ({
                   mysql:
                     condition: service_started
                 ports:
-                  - 7070:80
+                  - ${dbport}:80
                 environment:
                   PMA_HOST: mysql
-                  PMA_USER: user
-                  PMA_PASSWORD: word
+                  PMA_USER: ${dbuser}
+                  PMA_PASSWORD: ${dbword}
             
               wordpress:
                 image: wordpress:latest
@@ -51,10 +61,10 @@ const INDEX = ({
                   mysql:
                     condition: service_started
                 ports:
-                  - 8080:80
-                  user: "${UID}:${GID}"
+                  - ${wpport}:80
+                user: "${UID}:${GID}"
                 volumes:
-                  - ./${wpword}/:/var/www/html/
+                  - ./${wpslug}/:/var/www/html/
             
               wp-cli:    
                 image: wordpress:cli
@@ -65,7 +75,7 @@ const INDEX = ({
                     condition: service_started
                 user: "${UID}:${GID}"
                 volumes:
-                  - ./${wpword}/:/var/www/html/
+                  - ./${wpslug}/:/var/www/html/
             
                 command: >
                   /bin/sh -c '
@@ -73,23 +83,21 @@ const INDEX = ({
             
                     wp config create\
                       --dbhost=mysql\
-                      --dbname=base\
-                      --dbuser=user\
-                      --dbpass=word\
+                      --dbname=${dbname}\
+                      --dbuser=${dbuser}\
+                      --dbpass=${dbword}\
                       --skip-check\
             
                     wp core install\
                       --path="/var/www/html"\
-                      --url="http://localhost:8080"\
-                      --title="Local Wordpress By Docker"\
-                      --admin_user=user\
-                      --admin_password=word\
-                      --admin_email=foo@bar.com\
+                      --url="http://localhost:${wpport}"\
+                      --admin_user=${wpuser}\
+                      --admin_password=${wpword}\
             
                     wp core update
             
-                    wp language core install ru_RU
-                    wp language core activate ru_RU
+                    wp language core install ${wplang}
+                    wp language core activate ${wplang}
             
                     wp plugin delete\
                       akismet\
@@ -125,28 +133,42 @@ const INDEX = ({
 
                 yes | docker container prune
                 yes | docker volume prune
-            `
+            `,
+            {mode: 0o755}
         ),
         writeFile(
             PATH + '/prunedb',
             `
             #!/bin/sh
 
-            yes | rm -R ./${dbword}/*
-            mkdir ./${dbword}
-            touch ./${dbword}/.gitkeep
-            `
+            yes | rm -R ./${dbslug}/*
+            mkdir ./${dbslug}
+            touch ./${dbslug}/.gitkeep
+            `,
+            {mode: 0o755}
         ),
         writeFile(
             PATH + '/prunewp',
             `
             #!/bin/sh
 
-            yes | rm -R ./${wpword}/*
-            mkdir ./${wpword}
-            touch ./${wpword}/.gitkeep
-            `
-        ),        
+            yes | rm -R ./${wpslug}/*
+            mkdir ./${wpslug}
+            touch ./${wpslug}/.gitkeep
+            `,
+            {mode: 0o755}
+        ),
+        writeFile(
+          PATH + '/prune',
+          `
+          #!/bin/sh
+
+          ./prunedc
+          ./prunedb
+          ./prunewp
+          `,
+          {mode: 0o755}
+      ),         
     ])
 
 export default INDEX

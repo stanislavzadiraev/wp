@@ -18,15 +18,6 @@
 
     "type": "module",
     "main": "dst/index.js",
-    "bin": "bin/index.js",    
-    "scripts": {
-        
-    },
-    "dependencies": {
-
-    },
-    "devDependencies": {
-
-    }
+    "bin": "bin/index.js"
   }
   
