@@ -1,13 +1,16 @@
-import { writeFile } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { userInfo } from 'node:os'
 const PATH = process.cwd()
 
 const {uid:UID, gid:GID} = userInfo()
 
 const INDEX = ({
-
+        wpword = 'wordpress',
+        dbword = 'database',
     }) =>
     Promise.all([
+        mkdir(PATH + `/` + wpword).catch(_=>_),
+        mkdir(PATH + `/` + dbword).catch(_=>_),
         writeFile(
             PATH + '/docker-compose.yml',
             `
@@ -26,7 +29,7 @@ const INDEX = ({
                   MYSQL_PASSWORD: word
                 user: "${UID}:${GID}"
                 volumes:
-                  - ./database/:/var/lib/mysql/
+                  - ./${dbword}/:/var/lib/mysql/
             
               phpmyadmin:
                 image: phpmyadmin:latest
@@ -51,7 +54,7 @@ const INDEX = ({
                   - 8080:80
                   user: "${UID}:${GID}"
                 volumes:
-                  - ./wordpress/:/var/www/html/
+                  - ./${wpword}/:/var/www/html/
             
               wp-cli:    
                 image: wordpress:cli
@@ -62,7 +65,7 @@ const INDEX = ({
                     condition: service_started
                 user: "${UID}:${GID}"
                 volumes:
-                  - ./wordpress/:/var/www/html/
+                  - ./${wpword}/:/var/www/html/
             
                 command: >
                   /bin/sh -c '
@@ -129,9 +132,9 @@ const INDEX = ({
             `
             #!/bin/sh
 
-            yes | rm -R ./database/*
-            mkdir ./database
-            touch ./database/.gitkeep
+            yes | rm -R ./${dbword}/*
+            mkdir ./${dbword}
+            touch ./${dbword}/.gitkeep
             `
         ),
         writeFile(
@@ -139,9 +142,9 @@ const INDEX = ({
             `
             #!/bin/sh
 
-            yes | rm -R ./wordpress/*
-            mkdir ./wordpress
-            touch ./wordpress/.gitkeep
+            yes | rm -R ./${wpword}/*
+            mkdir ./${wpword}
+            touch ./${wpword}/.gitkeep
             `
         ),        
     ])
