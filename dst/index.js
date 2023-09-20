@@ -4,6 +4,21 @@ const PATH = process.cwd()
 
 const {uid:UID, gid:GID} = userInfo()
 
+const plugins = [
+  'advanced-custom-fields',
+  'woocommerce',
+  'media-sync',
+  'post-duplicator',
+  'create-block-theme',
+  'advanced-query-loop',
+  'content-blocks-builder',
+  'icon-block',
+]
+
+const themes = [
+
+]
+
 const INDEX = ({
         wpslug = 'wordpress',
         dbslug = 'database',
@@ -22,6 +37,12 @@ const INDEX = ({
         wpmail = 'mail@nowhere.void',
 
         wpport = '8080',
+
+        wpcontent = [
+          ['theme', 'themes/theme'],
+          ['plugin', 'plugins/plugin'],
+          ['upload', 'uploads/upload'],
+        ],
     }) =>
     Promise.all([
         mkdir(PATH + `/` + wpslug).catch(_=>_),
@@ -68,8 +89,10 @@ const INDEX = ({
                 ports:
                   - ${wpport}:80
                 user: "${UID}:${GID}"
-                volumes:
-                  - ./${wpslug}/:/var/www/html/
+                volumes: [
+                  ./${wpslug}/:/var/www/html/,
+${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).join('\n')}
+                ]
             
               wp-cli:    
                 image: wordpress:cli
@@ -81,6 +104,7 @@ const INDEX = ({
                 user: "${UID}:${GID}"
                 volumes:
                   - ./${wpslug}/:/var/www/html/
+${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).join('\n')}
             
                 command: >
                   /bin/sh -c '
@@ -110,18 +134,7 @@ const INDEX = ({
                       akismet\
                       hello\
             
-                    wp plugin install\
-                      advanced-custom-fields\
-                      \
-                      woocommerce\
-                      \
-                      media-sync\
-                      post-duplicator\
-                      \
-                      create-block-theme\
-                      advanced-query-loop\
-                      content-blocks-builder\
-                      icon-block\
+                    wp plugin install ${plugins.join(' ')}
             
                     wp plugin update --all
                     wp plugin activate --all
@@ -130,6 +143,7 @@ const INDEX = ({
                       twentytwentyone\
                       twentytwentytwo\
                       
+                    wp theme install ${themes.join(' ')}
                   '
             `
         ),
