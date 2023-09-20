@@ -45,6 +45,7 @@ const INDEX = ({
         ],
     }) =>
     Promise.all([
+        Promise.all(wpcontent.map(([src]) => mkdir(src).catch(_=>_))),
         mkdir(PATH + `/` + wpslug).catch(_=>_),
         mkdir(PATH + `/` + dbslug).catch(_=>_),
         writeFile(
@@ -102,9 +103,10 @@ ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).joi
                   mysql:
                     condition: service_started
                 user: "${UID}:${GID}"
-                volumes:
-                  - ./${wpslug}/:/var/www/html/
+                volumes: [
+                  ./${wpslug}/:/var/www/html/,
 ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).join('\n')}
+                ]
             
                 command: >
                   /bin/sh -c '
