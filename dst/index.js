@@ -1,24 +1,22 @@
 import { writeFile, mkdir } from 'node:fs/promises'
+import { join } from 'node:path'
 import { userInfo } from 'node:os'
-const PATH = process.cwd()
 
 const {uid:UID, gid:GID} = userInfo()
 
-const R = {recursive: true}
+const N = () => undefined
+
+const DIR = $ => mkdir(join(process.cwd(), $), {recursive: true}).catch(N)
 
 const plugins = [
-  'advanced-custom-fields',
   'woocommerce',
   'media-sync',
-  'post-duplicator',
-  'create-block-theme',
-  'advanced-query-loop',
-  'content-blocks-builder',
   'icon-block',
 ]
 
 const themes = [
-
+  'https://github.com/stanislavzadiraev/alpha/archive/refs/heads/master.zip',
+  'https://github.com/stanislavzadiraev/beta/archive/refs/heads/master.zip',
 ]
 
 const INDEX = ({
@@ -47,16 +45,16 @@ const INDEX = ({
         ],
     }) =>
     Promise.all([
-      mkdir(PATH + `/` + wppath, R).catch(_=>_),
-      mkdir(PATH + `/` + dbpath, R).catch(_=>_),
+      DIR(wppath),
+      DIR(dbpath),
         Promise.all(wpcontent.map(([src, dst]) =>
           Promise.all([
-            mkdir(src, R).catch(_=>_),
-            mkdir(PATH + `/` + wppath + `/wp-content/` + dst, R).catch(_=>_)
+            DIR(src),
+            DIR(join(wppath, `wp-content`, dst)),
           ])
         )),
         writeFile(
-            PATH + '/docker-compose.yml',
+            'docker-compose.yml',
             `
             version: '3.1'
 
@@ -157,7 +155,7 @@ const INDEX = ({
             `
         ),
         writeFile(
-          PATH + '/prune',
+          'prune',
           `
           #!/bin/sh
 
