@@ -4,6 +4,8 @@ const PATH = process.cwd()
 
 const {uid:UID, gid:GID} = userInfo()
 
+const R = {recursive: true}
+
 const plugins = [
   'advanced-custom-fields',
   'woocommerce',
@@ -20,8 +22,8 @@ const themes = [
 ]
 
 const INDEX = ({
-        wpslug = 'wordpress',
-        dbslug = 'database',
+        wppath = 'wordpress',
+        dbpath = 'database',
 
         dbname = 'base',
         dbuser = 'user',
@@ -45,9 +47,14 @@ const INDEX = ({
         ],
     }) =>
     Promise.all([
-        Promise.all(wpcontent.map(([src]) => mkdir(src).catch(_=>_))),
-        mkdir(PATH + `/` + wpslug).catch(_=>_),
-        mkdir(PATH + `/` + dbslug).catch(_=>_),
+      mkdir(PATH + `/` + wppath, R).catch(_=>_),
+      mkdir(PATH + `/` + dbpath, R).catch(_=>_),
+        Promise.all(wpcontent.map(([src, dst]) =>
+          Promise.all([
+            mkdir(src, R).catch(_=>_),
+            mkdir(PATH + `/` + wppath + `/wp-content/` + dst, R).catch(_=>_)
+          ])
+        )),
         writeFile(
             PATH + '/docker-compose.yml',
             `
@@ -66,7 +73,7 @@ const INDEX = ({
                   MYSQL_PASSWORD: ${dbword}
                 user: "${UID}:${GID}"
                 volumes:
-                  - ./${dbslug}/:/var/lib/mysql/
+                  - ./${dbpath}/:/var/lib/mysql/
             
               phpmyadmin:
                 image: phpmyadmin:latest
@@ -91,8 +98,8 @@ const INDEX = ({
                   - ${wpport}:80
                 user: "${UID}:${GID}"
                 volumes: [
-                  ./${wpslug}/:/var/www/html/,
-${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).join('\n')}
+                  ./${wppath}/:/var/www/html/,
+                  ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/`).join(', ')}
                 ]
             
               wp-cli:    
@@ -104,10 +111,10 @@ ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).joi
                     condition: service_started
                 user: "${UID}:${GID}"
                 volumes: [
-                  ./${wpslug}/:/var/www/html/,
-${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).join('\n')}
+                  ./${wppath}/:/var/www/html/,
+                  ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/`).join(', ')}
                 ]
-            
+          
                 command: >
                   /bin/sh -c '
                     sleep 40
@@ -154,8 +161,8 @@ ${wpcontent.map(([src, dst])=>`./${src}/:/var/www/html/wp-content/${dst}/,`).joi
           `
           #!/bin/sh
 
-          yes | rm -R ./${dbslug}
-          yes | rm -R ./${wpslug}
+          yes | rm -R ./${dbpath}
+          yes | rm -R ./${wppath}
           yes | rm ./docker-compose.yml
           yes | rm ./prune
           `,
