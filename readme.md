@@ -30,6 +30,8 @@ npm install https://github.com/stanislavzadiraev/wp.git
 ```
 изменение `package.json` проекта
 ```
+  "type": "module",
+
   "scripts": {
     "wp": "wp"
   },
