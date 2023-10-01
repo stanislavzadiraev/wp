@@ -7,8 +7,8 @@ const {uid:UID, gid:GID} = userInfo()
 
 const N = () => undefined
 
-const MKDIR = $ => mkdir(join(process.cwd(), $), {recursive: true}).catch(N)
-const RMDIR = $ => rmdir(join(process.cwd(), $), {recursive: true}).catch(N)
+const MKDIR = $ => mkdir($, {recursive: true}).catch(N)
+const RMDIR = $ => rmdir($, {recursive: true}).catch(N)
 
 const plugins = [
   'woocommerce',
