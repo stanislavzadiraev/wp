@@ -8,7 +8,7 @@ const {uid:UID, gid:GID} = userInfo()
 const N = () => undefined
 
 const MKDIR = $ => mkdir(join(process.cwd(), $), {recursive: true}).catch(N)
-const RMDIR = $ => rmdir(join(process.cwd(), $),{recursive: true}).catch(N)
+const RMDIR = $ => rmdir(join(process.cwd(), $), {recursive: true}).catch(N)
 
 const plugins = [
   'woocommerce',
@@ -165,7 +165,7 @@ const build = ({
   Promise.all(
     [dbpath, wppath, `docker-compose.yml`]
     .map(path =>
-      RMDIR(path)
+      rm(join(process.cwd(), path), {force: true, recursive: true})
     )
   )
 
