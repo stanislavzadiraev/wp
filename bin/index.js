@@ -9,9 +9,7 @@ const C = '../'
 const curpath = new Array(1).fill(C).join('')
 const parpath = new Array(3).fill(C).join('')
 
-const srcname = 'src'
-const dstname = 'dst'
-
+const mdlname = ['src', 'dst'][1]
 
 Promise
 .all([
@@ -25,13 +23,13 @@ Promise
   process.title += I + parname + I + curname,
   Promise
   .all([
-    import(curpath + dstname + '/index.js'),
+    import(curpath + mdlname + '/index.js'),
     import(parpath + curname + '.config.js'),
   ])
 ))
 .then(([
   {default: mdl},
   {default: cfg},
-]) => (
-  mdl(cfg)
-))
+]) => 
+  process.argv.slice(2).reduce((acc, cur) => acc && acc[cur], mdl)(cfg)
+)
