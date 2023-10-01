@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from 'node:fs/promises'
+import { writeFile, mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { userInfo } from 'node:os'
 import { spawn } from 'node:child_process'
@@ -160,13 +160,16 @@ const build = ({
 const prune = ({
     wppath = 'wordpress',
     dbpath = 'database',
-  }) => 
-  spawn('bash', ['-c', 
-    `
-    yes | rm -R ./${dbpath}
-    yes | rm -R ./${wppath}
-    yes | rm ./docker-compose.yml
-    `    
-  ])
+  }) =>
+  Promise.all(
+    [
+      `./${dbpath}`,
+      `./${wppath}`,
+      `./docker-compose.yml`
+    ]
+    .map(path =>
+      rm(path, {force: true, recursive: true})
+    )
+  )
 
 export default {build, prune}
