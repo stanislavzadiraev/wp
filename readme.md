@@ -26,7 +26,7 @@ npm init
 ### Пакет
 установка
 ```
-npm install https://github.com/stanislavzadiraev/wp.git
+npm install -D https://github.com/stanislavzadiraev/wp.git
 ```
 изменение `package.json` проекта
 ```
@@ -80,14 +80,16 @@ export default {
 }
 ```
 ### Выполнение
+создание окружения
 ```
-npm run wp
+npm run wp build
 ```
-### Результат
-файл конфигурации Docker
-\
-`docker-compose.yml`
-\
-файл команды очистки
-\
-`./prune`
+удаление окружения
+```
+npm run wp prune
+```
+### Окружение
+- файл конфигурации Docker Compose
+- файловая подсистема MySQL
+- файловая подсистема Wordpress
+- прочие фпайловые подсистемы
