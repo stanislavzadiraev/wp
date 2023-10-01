@@ -1,4 +1,4 @@
-import { writeFile, mkdir, rm } from 'node:fs/promises'
+import { writeFile, mkdir, rmdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { userInfo } from 'node:os'
 import { spawn } from 'node:child_process'
@@ -7,7 +7,8 @@ const {uid:UID, gid:GID} = userInfo()
 
 const N = () => undefined
 
-const PATH = $ => mkdir(join(process.cwd(), $), {recursive: true}).catch(N)
+const MKDIR = $ => mkdir(join(process.cwd(), $), {recursive: true}).catch(N)
+const RMDIR = $ => rmdir(join(process.cwd(), $),{recursive: true}).catch(N)
 
 const plugins = [
   'woocommerce',
@@ -46,12 +47,12 @@ const build = ({
     ],
   }) =>
   Promise.all([
-    PATH(wppath),
-    PATH(dbpath),
+    MKDIR(wppath),
+    MKDIR(dbpath),
     Promise.all(wpcontent.map(([src, dst]) =>
       Promise.all([
-        PATH(src),
-        PATH(join(wppath, `wp-content`, dst)),
+        MKDIR(src),
+        MKDIR(join(wppath, `wp-content`, dst)),
       ])
     )),
     writeFile(
@@ -157,18 +158,14 @@ const build = ({
     ),
   ])
 
-const prune = ({
+  const prune = ({
     wppath = 'wordpress',
     dbpath = 'database',
   }) =>
   Promise.all(
-    [
-      `./${dbpath}`,
-      `./${wppath}`,
-      `./docker-compose.yml`
-    ]
+    [dbpath, wppath, `docker-compose.yml`]
     .map(path =>
-      rm(path, {force: true, recursive: true})
+      RMDIR(path)
     )
   )
 
