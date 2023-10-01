@@ -165,7 +165,7 @@ const build = ({
   Promise.all(
     [dbpath, wppath, `docker-compose.yml`]
     .map(path =>
-      rm(join(process.cwd(), path), {force: true, recursive: true})
+      rm(path, {force: true, recursive: true})
     )
   )
 
