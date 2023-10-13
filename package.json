@@ -1,23 +1,27 @@
 {
-    "name": "wp",
-    "version": "0.0.1",
-    "keywords": ["WP"],
-    "description": "Some WP",
-    "license": "ISC",
-    "author": "https://github.com/stanislavzadiraev",
-    "homepage": "https://github.com/stanislavzadiraev/wp#readme",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/stanislavzadiraev/wp.git"
-    },
-    "bugs": {
-      "url": "https://github.com/stanislavzadiraev/wp/issues"
-    },
-
-
-
-    "type": "module",
-    "main": "dst/index.js",
-    "bin": "bin/index.js"
-  }
-  
+  "name": "wp",
+  "version": "0.0.1",
+  "keywords": [
+    "WP"
+  ],
+  "description": "Some WP",
+  "license": "ISC",
+  "author": "https://github.com/stanislavzadiraev",
+  "homepage": "https://github.com/stanislavzadiraev/wp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stanislavzadiraev/wp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stanislavzadiraev/wp/issues"
+  },
+  "devDependencies": {
+    "pusher": "github:stanislavzadiraev/pusher"
+  },
+  "scripts": {
+    "pusher": "pusher"
+  },
+  "type": "module",
+  "main": "dst/index.js",
+  "bin": "bin/index.js"
+}
